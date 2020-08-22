@@ -1,0 +1,269 @@
+{
+  "info": {
+    "title": "REST API template",
+    "version": "1.0.0",
+    "description": "Full functional scalable REST API Template"
+  },
+  "tags": {
+    "name": "auth",
+    "description": "Authorization endpoints"
+  },
+  "basePath": "/api/v1",
+  "swagger": "2.0",
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "summary": [
+          "Register a new user"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User to be registered",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RegisterUser"
+            }
+          }
+        ],
+        "tags": [
+          "auth"
+        ],
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "ObjectId"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "E-mail already exists"
+          },
+          "422": {
+            "description": "Some required field is missing"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": [
+          "Logs the user in and get an authorization token"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User to be logged",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/LoginUser"
+            }
+          }
+        ],
+        "tags": [
+          "auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "msg": {
+                  "type": "string"
+                },
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "token": {
+                  "type": "string",
+                  "format": "jwt"
+                },
+                "id": {
+                  "type": "string",
+                  "format": "ObjectId"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "E-mail/password is wrong"
+          },
+          "422": {
+            "description": "Some required field is missing"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "get": {
+        "summary": [
+          "Get user data by id"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "200": {
+            "description": "User fetched successfully",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "description": "User id param is different from the user id inside JWT payload"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      },
+      "delete": {
+        "summary": [
+          "Delete the user with the given id"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "users"
+        ],
+        "responses": {
+          "204": {
+            "description": "User deleted successfully"
+          },
+          "401": {
+            "description": "User id param is different from the user id inside JWT payload"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "LoginUser": {
+      "type": "object",
+      "required": "email password",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "password": {
+          "type": "string",
+          "minLength": 8,
+          "example": "testing123"
+        }
+      }
+    },
+    "Telefones": {
+      "type": "object",
+      "properties": {
+        "ddd": {
+          "type": "string",
+          "lenght": 3
+        },
+        "numero": {
+          "type": "string",
+          "maxLenght": 9,
+          "minLenght": 8
+        }
+      }
+    },
+    "RegisterUser": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/LoginUser"
+        }
+      ],
+      "type": "object",
+      "required": "name",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 3
+        },
+        "telefone": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Telefones"
+          }
+        }
+      }
+    },
+    "UpdateUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 3
+        },
+        "telephone": {
+          "type": "array",
+          "minLength": 3
+        }
+      }
+    },
+    "User": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/UpdateUser"
+        }
+      ],
+      "type": "object",
+      "required": "createdAt updatedAt",
+      "properties": {
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "responses": {},
+  "parameters": {},
+  "securityDefinitions": {}
+}
