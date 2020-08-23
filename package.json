@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/server",
-    "test": "jest --detectOpenHandles --unhandled-rejections=strict"
+    "start": "node ./src/server"
   },
   "keywords": [],
   "author": "",
