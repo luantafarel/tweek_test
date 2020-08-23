@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const moment = require('moment')
 
-const userModel = require('./models/user')
+const userModel = require('./src/models/user')
 
 module.exports.register = async (event, context, callback) => {
     const requestBody = JSON.parse(event.body);

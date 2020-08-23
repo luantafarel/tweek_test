@@ -25,7 +25,9 @@ provider:
   runtime: nodejs12.x
   stage: dev
   region: us-east-1
-
+  credentials:
+    accessKeyId: AKIAYNXT7QV25SHMQI53
+    secretAccessKey: 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
 # you can overwrite defaults here
 
 # you can add statements to the Lambda function's IAM Role here
@@ -61,15 +63,14 @@ Outputs:
     Description: "ARN for the IAM Role used by SF Pro"
     Value: arn:aws:iam::579258516853:role/SFProRole-default
 Parameters:
-  OrgId:
-    Description: SF Pro Org Id
-    Type: String
-  ProfileName:
-    Description: SF Pro Profile Name
-    Type: String
-  RoleName:
-    Description: SF Pro Role Name
-    Type: String
+  VPC:
+    Type: AWS::EC2::VPC::Id
+    Description: The ID for the VPC in which the EC2 instance will be launched.
+
+  Subnet:
+    Type: AWS::EC2::Subnet::Id
+    Description: The ID for the Subnet in which the EC2 instance will be launched.
+
 # iamRoleStatements:
 #   - Effect: "Allow"
 #     Action:
@@ -102,7 +103,7 @@ functions:
   hello:
     handler: handler.hello
   userRegister:
-    handler: src/controller.register
+    handler: index.register
     memorySize: 128
     description: Register a user in the system.
     events:
@@ -110,7 +111,7 @@ functions:
           path: user/register
           method: post
   userlogin:
-    handler: src/controller.login
+    handler: index.login
     memorySize: 128
     description: Login a user in the system.
     events:
