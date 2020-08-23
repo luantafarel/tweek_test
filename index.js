@@ -5,6 +5,8 @@ const moment = require('moment')
 const userModel = require('./src/models/user')
 
 module.exports.register = async (event, context, callback) => {
+    
+    try {
     const requestBody = JSON.parse(event.body);
 
     let { name, email, password, telefone } = requestBody
@@ -31,7 +33,6 @@ module.exports.register = async (event, context, callback) => {
 
     // Encrypt the password and create the user in the database
     let hashedPassword = await bcrypt.hash(password, 8)
-    try {
         let user = await userModel.create({
             name: name,
             email: email,
@@ -54,7 +55,7 @@ module.exports.register = async (event, context, callback) => {
             })
         });
     } catch (error) {
-        console.error('User not created');
+        console.error(error);
         callback(new Error('Failed to create user'));
         return;
     }
