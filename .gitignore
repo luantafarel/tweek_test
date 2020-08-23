@@ -1,6 +1,10 @@
+# package directories
 node_modules
-logs
-yarn-error.log
-.vscode
-/data
-*dump
+jspm_packages
+
+# Serverless directories
+.serverless
+
+data/
+logs*
+.vscode/
