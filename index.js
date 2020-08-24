@@ -5,34 +5,34 @@ const moment = require('moment')
 const userModel = require('./src/models/user')
 
 module.exports.register = async (event, context, callback) => {
-    
     try {
-    const requestBody = JSON.parse(event.body);
+        await db.connect()
+        const requestBody = JSON.parse(event.body);
 
-    let { name, email, password, telefone } = requestBody
-    // Check if the body of the request is valid
-    if (!email || !name || !password) {
-        console.error('Validation Failed');
-        callback(new Error('Couldn\'t register user because of validation errors.'));
-        return;
-    }
+        let { name, email, password, telefone } = requestBody
+        // Check if the body of the request is valid
+        if (!email || !name || !password) {
+            console.error('Validation Failed');
+            callback(new Error('Couldn\'t register user because of validation errors.'));
+            return;
+        }
 
-    // Check if e-mail already exists
-    let emailExists
-    try {
-        emailExists = await userModel.findOne({ email: email })
-    } catch (error) {
-        callback(new Error('Unexpected error happened'));
-        return;
-    }
-    if (emailExists) {
-        console.error('Validation Failed');
-        callback(new Error('Email in use'));
-        return;
-    }
+        // Check if e-mail already exists
+        let emailExists
+        try {
+            emailExists = await userModel.findOne({ email: email })
+        } catch (error) {
+            callback(new Error('Unexpected error happened'));
+            return;
+        }
+        if (emailExists) {
+            console.error('Validation Failed');
+            callback(new Error('Email in use'));
+            return;
+        }
 
-    // Encrypt the password and create the user in the database
-    let hashedPassword = await bcrypt.hash(password, 8)
+        // Encrypt the password and create the user in the database
+        let hashedPassword = await bcrypt.hash(password, 8)
         let user = await userModel.create({
             name: name,
             email: email,
@@ -62,18 +62,19 @@ module.exports.register = async (event, context, callback) => {
 }
 
 module.exports.login = async (event, context, callback) => {
-    const requestBody = JSON.parse(event.body);
-
-    let { email, password } = requestBody
-    // Check if the body of the request is valid
-    if (!email || !password) {
-        console.error('Validation Failed');
-        callback(new Error('Couldn\'t login user because of validation errors.'));
-        return;
-    }
-
-    // Check if the user exists and if the password is valid
     try {
+        await db.connect()
+        const requestBody = JSON.parse(event.body);
+
+        let { email, password } = requestBody
+        // Check if the body of the request is valid
+        if (!email || !password) {
+            console.error('Validation Failed');
+            callback(new Error('Couldn\'t login user because of validation errors.'));
+            return;
+        }
+
+        // Check if the user exists and if the password is valid
         let userExists = await userModel.findOne({ email: email })
         if (!userExists) {
             console.error('Email/password is wrong');
