@@ -1,33 +1,18 @@
 {
-  "name": "24-07-2020",
+  "name": "aws-node-rest-api-mongodb",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node ./src/server"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "description": "Serverless REST API with MongoDB using Mongoose and Bluebird",
+  "main": "handler.js",
   "dependencies": {
-    "@hapi/boom": "^9.1.0",
-    "axios": "^0.19.2",
+    "aws-sdk": "^2.739.0",
     "bcryptjs": "^2.4.3",
-    "chai-http": "^4.3.0",
-    "cors": "^2.8.5",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "express-validator": "^6.6.0",
-    "fs": "^0.0.1-security",
-    "helmet": "^3.23.3",
-    "jest": "^26.1.0",
+    "bluebird": "^3.5.0",
+    "exiftool": "^0.0.3",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.19",
-    "mocha": "^8.0.1",
+    "jwt": "^0.2.0",
     "moment": "^2.27.0",
-    "mongoose": "^5.9.26",
-    "swagger-ui-express": "^4.1.4",
-    "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.0"
-  }
+    "mongoose": "^5.10.0",
+    "validator": "^13.1.1"
+  },
+  "license": "MIT"
 }
